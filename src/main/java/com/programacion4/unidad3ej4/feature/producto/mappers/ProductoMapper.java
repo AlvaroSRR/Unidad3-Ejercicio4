@@ -9,12 +9,13 @@ public class ProductoMapper {
     
     public static Producto toEntity(ProductoCreateRequestDto dto, Categoria categoria) {
         return Producto.builder()
-                .nombre(dto.getNombre())
+                .nombre(capitalizeWords(to.getNombre()))
                 .codigo(dto.getCodigo())
-                .descripcion(dto.getDescripcion())
+                .descripcion(capitalizeWords(dto.getDescripcion()))
                 .precio(dto.getPrecio())
                 .stock(dto.getStock())
                 .categoria(categoria)
+                .estaEliminado(false) 
                 .build();
     }
 
@@ -29,4 +30,23 @@ public class ProductoMapper {
                 .categoria(CategoriaMapper.toDto(producto.getCategoria()))
                 .build();
     }
+
+private static String capitalizeWords(String texto) {
+    if (texto == null || texto.isEmpty()) return texto;
+
+    texto = texto.toLowerCase();
+
+    String[] palabras = texto.split(" ");
+    StringBuilder resultado = new StringBuilder();
+
+    for (String palabra : palabras) {
+        if (!palabra.isEmpty()) {
+            resultado.append(Character.toUpperCase(palabra.charAt(0)))
+                     .append(palabra.substring(1))
+                     .append(" ");
+        }
+    }
+
+    return resultado.toString().trim();
+}
 }
